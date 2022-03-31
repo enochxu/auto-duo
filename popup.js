@@ -20,7 +20,11 @@ async function injectScript(passcode) {
 }
 
 chrome.storage.sync.get(null, async (data) => {
-    const uclaUrl = "https://shb.ais.ucla.edu/shibboleth-idp/profile/SAML2/Redirect/SSO"; 
+    const uclaUrl = "https://shb.ais.ucla.edu/shibboleth-idp/profile/SAML2/Redirect/SSO";
+    //Regex unused 
+    let linkRegEx = new RegExp('https:\/\/shb\.ais\.ucla\.edu\/shibboleth-idp\/profile\/SAML2\/Redirect\/SSO\?execution=e.s4')
+    //Authentication usually happens on stage 4
+    //https://shb.ais.ucla.edu/shibboleth-idp/profile/SAML2/Redirect/SSO?execution=e1s4
     let HOTPSecret = data.HOTPSecret;
 
     result = await chrome.tabs.query({'active': true, 'windowId': chrome.windows.WINDOW_ID_CURRENT});
@@ -35,7 +39,7 @@ chrome.storage.sync.get(null, async (data) => {
             let host = 'api' + link.substring(link.indexOf('-'), link.indexOf('com') + 3);
             let key = link.substring(link.lastIndexOf('/') + 1);
             let duoURL = 'https://' + host + '/push/v2/activation/' + key + '?customer_protocol=1';
-            let cors_anywhere = 'https://sparkshen02.herokuapp.com/'; // my own instance of CORS Anywhere
+            let cors_anywhere = 'https://sparkshen02.herokuapp.com/';
             duoURL = cors_anywhere + duoURL;
 
             let http = new XMLHttpRequest();
@@ -54,8 +58,10 @@ chrome.storage.sync.get(null, async (data) => {
             http.send();
         };
     }
-    else if (currentUrl.startsWith(uclaUrl)) // calculate and display the next HOTP passcode
+    else if (currentUrl.startsWith(uclaUrl) && currentUrl.endsWith("s4")) 
+    // calculate and display the next HOTP passcode
     {
+
         document.getElementById('setUp').classList.add('hidden');
         document.getElementById('setUpSuccess').classList.add('hidden');
         document.getElementById('displayPasscode').classList.remove('hidden');
@@ -78,8 +84,8 @@ chrome.storage.sync.get(null, async (data) => {
             count = 0;
         }
         document.getElementById('counter').innerHTML = count;
-
         document.getElementById('retry').click();
+
     } else {
         document.getElementById('setUp').classList.add('hidden');
         document.getElementById('setUpSuccess').classList.add('hidden');
