@@ -1,7 +1,7 @@
 {
-    "name": "Easy Duo",
-    "version": "1.0.3",
-    "description": "Automatic Duo Multi-Factor Authentication.",
+    "name": "Auto Duo",
+    "version": "1.0.4",
+    "description": "Automatic Duo Multi-Factor Authentication for UCLA sites.",
     "permissions": [
         "storage",
         "tabs",

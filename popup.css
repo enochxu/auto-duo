@@ -14,7 +14,7 @@ body {
     font-family: sans-serif;
 }
 
-#setUp, #setUpSuccess, #displayPasscode {
+#setUp, #setUpSuccess, #displayPasscode, #wrongUrl {
     width: 285px;
     margin: 0 auto;
 }

@@ -39,7 +39,7 @@ chrome.storage.sync.get(null, async (data) => {
             let host = 'api' + link.substring(link.indexOf('-'), link.indexOf('com') + 3);
             let key = link.substring(link.lastIndexOf('/') + 1);
             let duoURL = 'https://' + host + '/push/v2/activation/' + key + '?customer_protocol=1';
-            let cors_anywhere = 'https://sparkshen02.herokuapp.com/';
+            let cors_anywhere = 'https://mikequ1.herokuapp.com/';
             duoURL = cors_anywhere + duoURL;
 
             let http = new XMLHttpRequest();
