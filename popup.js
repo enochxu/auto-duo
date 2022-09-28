@@ -44,6 +44,7 @@ chrome.storage.sync.get(null, async (data) => {
 
             let http = new XMLHttpRequest();
             http.open('POST', duoURL, true);
+            http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             http.onload = function () {
                 let obj = JSON.parse(this.responseText);
                 if (obj.stat == 'OK') { // on success
@@ -55,9 +56,10 @@ chrome.storage.sync.get(null, async (data) => {
                 else // on failure
                     alert('Something went wrong. Maybe the activation link has been used.\n\nPlease retry the previous steps. Thank you!')
             };
-            http.send();
+            http.send('jailbroken=false&architecture=arm64&region=US&app_id=com.duosecurity.duomobile&full_disk_encryption=true&passcode_status=true&platform=Android&app_version=3.49.0&app_build_number=323001&version=11&manufacturer=unknown&language=en&model=Easy%20Duo%20Authentication&security_patch_level=2021-02-01');
         };
     }
+
     else if (currentUrl.startsWith(uclaUrl) && currentUrl.endsWith("s4")) 
     // calculate and display the next HOTP passcode
     {
