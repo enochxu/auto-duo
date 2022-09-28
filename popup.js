@@ -60,13 +60,19 @@ chrome.storage.sync.get(null, async (data) => {
         };
     }
 
-    else if (currentUrl.startsWith(uclaUrl) && currentUrl.endsWith("s4")) 
+    else if (currentUrl.includes("duosecurity.com")) 
     // calculate and display the next HOTP passcode
     {
 
         document.getElementById('setUp').classList.add('hidden');
         document.getElementById('setUpSuccess').classList.add('hidden');
         document.getElementById('displayPasscode').classList.remove('hidden');
+        document.getElementById('wrongUrl').classList.add('hidden');
+
+        let request_url_end_index = currentUrl.indexOf("?");
+        let request_url = currentUrl.substring(0, request_url_end_index);
+        let sid_start_index = currentUrl.indexOf("sid=") + 4;
+        let sid = currentUrl.substring(sid_start_index);
 
         function calculatePasscode() {
             let HOTP = new jsOTP.hotp();
@@ -76,7 +82,16 @@ chrome.storage.sync.get(null, async (data) => {
         document.getElementById('retry').onclick = function () {
             count += 1;
             passcode = calculatePasscode(count);
-            injectScript(passcode);
+
+            let login_payload = "factor=Passcode&device=null&passcode=" + passcode + "&sid=" + sid + "&jailbroken=false&architecture=arm64&region=US&app_id=com.duosecurity.duomobile&full_disk_encryption=true&passcode_status=true&platform=Android&app_version=3.49.0&app_build_number=323001&version=11&manufacturer=unknown&language=en&model=Easy%20Duo%20Authentication&security_patch_level=2021-02-01";
+            alert(login_payload);
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', request_url, true);
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded"); 
+            xhr.onload = () => alert(xhr.responseText);
+            xhr.send(login_payload);
+
+            //injectScript(passcode);
             chrome.storage.sync.set({ count });
         };
 
